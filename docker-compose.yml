@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    image: hussainrazakhan/simple-web:part1
+    container_name: web_part1
+    restart: unless-stopped
+    ports:
+      - "80:3000"           # host:container -> accessible on port 80 externally
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=secret
+      - DB_NAME=appdb
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: db_part1
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: appdb
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
